@@ -15,7 +15,7 @@ Cached requests are stored locally as HTTP Archive Format (HAR) files, so they c
 Install the library:
 
 ```
-npm i @nodelab/vcr -D
+npm i @simplenode/vcr -D
 ```
 
 Once the library has been installed, create a `.vcrrc.js` file in your project and add the back-end APIs you use to the file:

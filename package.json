@@ -1,5 +1,5 @@
 {
-  "name": "@nodelab/vcr",
+  "name": "@simplenode/vcr",
   "description": "📼 Record, play and replay your back-end HTTP calls",
   "version": "0.0.0",
   "license": "MIT",
