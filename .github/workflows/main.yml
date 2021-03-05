@@ -30,3 +30,6 @@ jobs:
         uses: cycjimmy/semantic-release-action@v2
         with:
           branch: master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
