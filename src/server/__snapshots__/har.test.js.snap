@@ -1,0 +1,76 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`HAR #generateHarEntry returns a valid HAR entry 1`] = `
+Object {
+  "cache": Object {},
+  "request": Object {
+    "bodySize": -1,
+    "cookies": Array [
+      Object {
+        "name": "cookie-a",
+        "value": "value-a",
+      },
+    ],
+    "headers": Array [
+      Object {
+        "name": "test-header",
+        "value": "header-a",
+      },
+    ],
+    "headersSize": -1,
+    "httpVersion": "HTTP/1.1",
+    "method": "GET",
+    "postData": Object {
+      "mimeType": "application/octet-stream",
+      "text": "{\\"foo\\":\\"bar\\"}",
+    },
+    "queryString": Array [
+      Object {
+        "name": "test-query",
+        "value": "query-a",
+      },
+    ],
+    "url": "https://example.com/a/b/c",
+  },
+  "response": Object {
+    "bodySize": -1,
+    "content": Object {
+      "comment": "gzip",
+      "encoding": "base64",
+      "mimeType": "plain/text",
+      "size": 8,
+      "text": "dGVzdA==",
+    },
+    "cookies": Array [],
+    "headers": Array [
+      Object {
+        "name": "response-header",
+        "value": "response-a",
+      },
+      Object {
+        "name": "content-encoding",
+        "value": "gzip",
+      },
+      Object {
+        "name": "content-type",
+        "value": "plain/text",
+      },
+    ],
+    "headersSize": -1,
+    "httpVersion": "HTTP/1.1",
+    "redirectURL": "",
+    "status": 201,
+    "statusText": "Created",
+  },
+  "startedDateTime": Any<String>,
+  "time": -1,
+  "timings": Object {
+    "blocked": -1,
+    "connect": 15,
+    "dns": -1,
+    "receive": 0,
+    "send": Any<Number>,
+    "wait": 0,
+  },
+}
+`;

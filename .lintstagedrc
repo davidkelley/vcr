@@ -1,0 +1,4 @@
+{
+  "*.js": ["npm run lint -- --fix", "npm test -- --findRelatedTests"],
+  "*.*": "npm run format",
+}

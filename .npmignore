@@ -1,0 +1,5 @@
+.eslintrc
+.lintstagedrc*
+.prettier*
+.releaserc*
+.git*
