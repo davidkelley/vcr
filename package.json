@@ -1,7 +1,7 @@
 {
   "name": "@simplenode/vcr",
   "description": "📼 Record, play and replay your back-end HTTP calls",
-  "version": "v1.0.0",
+  "version": "v1.0.1",
   "license": "MIT",
   "main": "index.js",
   "bin": {
