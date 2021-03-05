@@ -32,14 +32,6 @@
       }
     ],
     [
-      "@semantic-release/gitlab", {
-        "assets": [
-          { "path": "package*" },
-          { "path": "src/**/*" }
-        ]
-      }
-    ],
-    [
       "@semantic-release/git",
       {
         "assets": [
@@ -49,6 +41,7 @@
         "message": "chore: 🤖 released version ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}"
       }
     ],
+    "@semantic-release/github",
     "@semantic-release/npm"
   ]
 }

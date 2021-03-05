@@ -1,0 +1,32 @@
+name: "🧰 Test & Release"
+
+on:
+  push:
+    branches:
+      - '*'
+
+jobs:
+  test-changes:
+    name: Test Changes
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: Install NodeJS
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+
+      - name: Install & Test
+        run: |
+          npm cit
+      
+      - name: Semantic Release
+        uses: cycjimmy/semantic-release-action@v2
+        with:
+          branch: master
