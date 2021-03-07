@@ -44,6 +44,9 @@ module.exports = {
         // This is particularly useful if your application uses different values
         // for specific headers in each request, such as a request ID.
         ignoreHeaders: ['x-dynamic-correlation-id'],
+        // ignore query parameters and strip them from the signature for a request.
+        // similar to ignore headers above, but for request query parameters.
+        ignoreQueryParameters: ['ts'],
       },
     },
   ],

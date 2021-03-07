@@ -92,14 +92,14 @@ class Cache {
    */
   static sanitizeRequestParameters(
     { method, host, pathname, query = {}, headers, body = '' },
-    { ignoreHeaders = [] }
+    { ignoreHeaders = [], ignoreQueryParameters = [] }
   ) {
     return {
       method: method.toUpperCase(),
       host: punycode.toASCII(host).toLowerCase(),
       pathname: punycode.toASCII(pathname).toLowerCase(),
       body: Cache.generateSignature(body),
-      query: Cache.sanitizeRequestObject(query),
+      query: Cache.sanitizeRequestObject(query, ignoreQueryParameters),
       headers: Cache.sanitizeRequestObject(headers, ignoreHeaders),
     };
   }
@@ -132,7 +132,7 @@ class Cache {
       /**
        * determine if the key needs to be filtered out
        */
-      if (filteredKeys.includes(name)) {
+      if (filteredKeys && filteredKeys.includes(name)) {
         return null;
       }
 

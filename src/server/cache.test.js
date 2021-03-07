@@ -36,6 +36,7 @@ const setup = () => {
   return new Cache('GET', 'example.com', '/foo/bar', exampleRequest, {
     testOption: 34,
     ignoreHeaders: ['x-forwarded-for'],
+    ignoreQueryParameters: ['page'],
   });
 };
 
@@ -63,7 +64,6 @@ describe('Cache', () => {
         ]),
         query: expect.arrayContaining([
           expect.objectContaining({ name: 'limit', value: '10' }),
-          expect.objectContaining({ name: 'page', value: '1' }),
         ]),
       })
     );
