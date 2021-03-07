@@ -1,7 +1,17 @@
 const harValidator = require('har-validator');
 const { Readable } = require('stream');
 
+/**
+ * The HAR class is responsible for taking request and response objects
+ * and building HAR entries files from them.
+ *
+ * It is also capable of taking existing HAR files from cached requests and
+ * generating consumable response streams from them.
+ */
 class HAR {
+  /**
+   * Accept an initial HAR file to use if one is apssed through
+   */
   constructor(initialHar = {}) {
     this.entries = [];
 
@@ -10,6 +20,9 @@ class HAR {
     }
   }
 
+  /**
+   * Determine if the HAR file in this instance is valid
+   */
   async isValid() {
     try {
       return await HAR.validateHar(this.toJSON());
@@ -18,6 +31,10 @@ class HAR {
     }
   }
 
+  /**
+   * Take the entries this HAR class has generated and
+   * create a JSON Structure that is compatible with HAR.
+   */
   toJSON() {
     const { entries } = this;
 
@@ -43,6 +60,15 @@ class HAR {
     return httpArchive;
   }
 
+  /**
+   * Using the first entry in the HAR instance, use the reply
+   * object that has been passed in, to construct a response back to the
+   * caller using the cached response.
+   *
+   * @note The reply parameter should be a fastify reply object
+   *
+   * @see https://www.fastify.io/docs/latest/Reply/
+   */
   async generateHarReply(reply) {
     const {
       entries: [entry],
@@ -61,6 +87,14 @@ class HAR {
     reply.send(HAR.createReadableStream(entry));
   }
 
+  /**
+   * Using the original request, the reply and the payload from the origin,
+   * build a HAR entry that can be consumed to produce cached responses in
+   * the future.
+   *
+   * @see https://en.wikipedia.org/wiki/HAR_(file_format)
+   * @see http://www.softwareishard.com/blog/har-12-spec/
+   */
   async generateHarEntry(request, reply, payload) {
     const { httpVersion } = request.raw;
 
@@ -129,10 +163,17 @@ class HAR {
     return entry;
   }
 
+  /**
+   * take a HAR object and validate it, returns true
+   * if the object is valid, false otherwise.
+   */
   static validateHar(har) {
     return harValidator.har(har);
   }
 
+  /**
+   * Take an object and return an array of HAR name and value tuples
+   */
   static generateEntryObjectList(obj) {
     return Object.keys(obj).map((key) => ({
       name: key,
@@ -140,6 +181,11 @@ class HAR {
     }));
   }
 
+  /**
+   * Transform the readable stream that respresents the response body
+   * from an origin into a base64 encoded string. Doing this, also allows
+   * us to cache binary content such as images and audio.
+   */
   static streamToEncodedString(stream) {
     if (typeof stream === 'string') {
       return stream;
@@ -158,6 +204,10 @@ class HAR {
     });
   }
 
+  /**
+   * Create a consumable readable stream from the response body content of
+   * the HAR entry passed in.
+   */
   static createReadableStream(entry) {
     const { content } = entry.response;
     return new Readable({

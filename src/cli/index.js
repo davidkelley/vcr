@@ -13,12 +13,21 @@ const { Command } = commander;
 
 const appConfig = loadConfig('vcr');
 
+/**
+ * Update the HAR cache directory to use the app configuration directory
+ */
 Cache.outputDirectory = path.resolve(process.cwd(), appConfig.snapshotsDir);
 
 const program = new Command();
 
+/**
+ * Use the CLI version from the package.json file
+ */
 program.version(pkg.version);
 
+/**
+ * Start caching responses from servers that have been configured to be proxies.
+ */
 program
   .command('record')
   .description('Record HTTP requests using a .vcrrc configuration file.')
@@ -26,6 +35,10 @@ program
     record(appConfig);
   });
 
+/**
+ * Respond with cached responses only; any requests received that have not been
+ * recorded before are responded with a 501 Status Code.
+ */
 program
   .command('play')
   .description(
@@ -35,6 +48,10 @@ program
     play(appConfig);
   });
 
+/**
+ * Take each HAR file and send another request to the origin,
+ * refreshing the cached response.
+ */
 program
   .command('replay')
   .description(
