@@ -1,3 +1,15 @@
+# [1.1.0](https://github.com/davidkelley/vcr/compare/v1.0.1...v1.1.0) (2021-03-08)
+
+
+### Bug Fixes
+
+* 🐛 handling URLs not prefixed with forward slash correctly ([231dc60](https://github.com/davidkelley/vcr/commit/231dc60149eff9273fac90000a4d0532c456ad0b))
+
+
+### Features
+
+* 🎸 enabling ignoreQueryParameters proxy option ([76c44b4](https://github.com/davidkelley/vcr/commit/76c44b4478cd21e0e44085cfe3c903777e0bf019))
+
 ## [1.0.1](https://github.com/davidkelley/vcr/compare/v1.0.0...v1.0.1) (2021-03-05)
 
 
