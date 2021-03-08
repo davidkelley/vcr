@@ -77,6 +77,7 @@ class Server {
     server.addHook('preHandler', this.onPreHandler);
     server.addHook('onSend', this.onSendHook);
 
+    // send all routes and all methods to this.onRequest handler!
     server.route({
       method: HTTP_METHODS,
       url: '*',
@@ -240,6 +241,13 @@ class Server {
   async start() {
     const { events, server, host, port } = this;
 
+    /**
+     * if the server has already started, do nothing
+     */
+    if (this.started) {
+      return true;
+    }
+
     return new Promise((resolve, reject) => {
       server.listen({ host, port }, (err, address) => {
         if (err) {
@@ -247,6 +255,7 @@ class Server {
         }
         this.started = true;
         if (port === 0) {
+          // get the port the server has bound to and apply it to the class
           const [, boundPort] = address.match(/:([0-9]+)$/);
           this.port = parseInt(boundPort, 10);
         }
@@ -264,7 +273,7 @@ class Server {
     const { events, server, started } = this;
 
     if (!started) {
-      return Promise.resolve(true);
+      return true;
     }
 
     await server.close();

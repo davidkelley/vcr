@@ -108,7 +108,10 @@ class HAR {
 
     const responseHeaders = reply.getHeaders();
 
-    const url = `${reply.protocol}//${request.hostname}${request.url}`;
+    const url = `${reply.protocol}//${request.hostname}/${request.url.replace(
+      /^\//,
+      ''
+    )}`;
 
     const entry = {
       startedDateTime: new Date().toISOString(),

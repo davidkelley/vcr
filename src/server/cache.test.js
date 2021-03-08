@@ -137,6 +137,24 @@ describe('Cache', () => {
     });
   });
 
+  describe('#all', () => {
+    beforeEach(() => {
+      mock({});
+    });
+
+    it('returns the correct files', () => {
+      const cache = setup();
+
+      cache.store({ test: 456 });
+
+      expect(cache.all()).toHaveLength(1);
+
+      expect(cache.all()).toEqual(
+        expect.arrayContaining([expect.stringMatching(/.+\.har$/)])
+      );
+    });
+  });
+
   describe('#isCached', () => {
     describe('when the request is cached', () => {
       beforeEach(() => {

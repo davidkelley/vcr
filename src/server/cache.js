@@ -3,6 +3,7 @@ const crypto = require('crypto');
 const merge = require('deepmerge');
 const punycode = require('punycode');
 const path = require('path');
+const glob = require('glob');
 
 const DEFAULT_IGNORE_HEADERS = ['host', 'user-agent'];
 
@@ -59,6 +60,18 @@ class Cache {
     const { outputDirectory } = Cache;
     const { host, pathname } = this.request;
     return path.join(outputDirectory, host, pathname);
+  }
+
+  /**
+   * Return all cached files for a particular host
+   */
+  all() {
+    const { outputDirectory } = Cache;
+    const { host } = this.request;
+
+    return glob.sync(path.join(outputDirectory, host, '**/*'), {
+      nodir: true,
+    });
   }
 
   /**
