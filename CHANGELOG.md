@@ -1,3 +1,10 @@
+# [1.2.0](https://github.com/davidkelley/vcr/compare/v1.1.0...v1.2.0) (2021-03-09)
+
+
+### Features
+
+* 🎸 implemented replay functionality, tests and docs ([4d04ca6](https://github.com/davidkelley/vcr/commit/4d04ca6b9707f52cad9277be7f9e18aef9476cd5))
+
 # [1.1.0](https://github.com/davidkelley/vcr/compare/v1.0.1...v1.1.0) (2021-03-08)
 
 
