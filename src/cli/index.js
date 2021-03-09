@@ -7,6 +7,7 @@ const Cache = require('../server/cache');
 const { loadConfig } = require('../utils/config');
 const { record } = require('../commands/record');
 const { play } = require('../commands/play');
+const { replay } = require('../commands/replay');
 const pkg = require('../../package.json');
 
 const { Command } = commander;
@@ -46,6 +47,19 @@ program
   )
   .action(() => {
     play(appConfig);
+  });
+
+/**
+ * The replay command loops all over all of the configured origins and all of the cached requests for
+ * each origin, updating the responses for each.
+ */
+program
+  .command('replay')
+  .description(
+    'Automatically replay all cached requests for all origins, updating the responses.'
+  )
+  .action(() => {
+    replay(appConfig);
   });
 
 /**

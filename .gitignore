@@ -3,6 +3,3 @@ coverage
 build
 .eslintcache
 *.tgz
-
-# Ignore test HAR files
-__fixtures__/**/*.har

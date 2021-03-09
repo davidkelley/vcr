@@ -1,4 +1,5 @@
 const harValidator = require('har-validator');
+const queryString = require('query-string');
 const { Readable } = require('stream');
 
 /**
@@ -61,6 +62,53 @@ class HAR {
   }
 
   /**
+   * Using the first entry in the HAR instance, use the object
+   * to build a fetch request object
+   */
+  generateHarRequest() {
+    const {
+      entries: [entry],
+    } = this;
+
+    if (!entry) {
+      throw new Error('Missing entry in HAR instance to build request from.');
+    }
+
+    const { request } = entry;
+
+    // get the request method!
+    const { method } = request;
+
+    // transform the headers into a standard object
+    const headers = HAR.generateObjectFromEntryList(request.headers);
+
+    // transform the query parameters into a standard object
+    const queryParameters = HAR.generateObjectFromEntryList(
+      request.queryString
+    );
+
+    // stringify the request url and the query parameters
+    const url = queryString.stringifyUrl({
+      url: request.url,
+      query: queryParameters,
+    });
+
+    // build the initial request options
+    const requestOptions = {
+      method,
+      headers,
+    };
+
+    // add the post data if necessary!
+    if (request.postData) {
+      requestOptions.body = request.postData.text;
+    }
+
+    // return fetch-compatible request arguments
+    return [url, requestOptions];
+  }
+
+  /**
    * Using the first entry in the HAR instance, use the reply
    * object that has been passed in, to construct a response back to the
    * caller using the cached response.
@@ -100,14 +148,18 @@ class HAR {
 
     const nsDuration = process.hrtime(request.startTimer);
 
+    // get the duration for the request
     const duration = parseFloat(
       (nsDuration[0] * 1e3 + nsDuration[1] / 1e6).toFixed(2)
     );
 
+    // convert the response payload readable stream to a base64 encoded string
     const text = await HAR.streamToEncodedString(payload);
 
+    // get all the response headers!
     const responseHeaders = reply.getHeaders();
 
+    // build the request URL to the origin, ensure there isn't any "//"
     const url = `${reply.protocol}//${request.hostname}/${request.url.replace(
       /^\//,
       ''
@@ -182,6 +234,20 @@ class HAR {
       name: key,
       value: obj[key].toString(),
     }));
+  }
+
+  /**
+   * Takes an object that is in the form of HAR name value tuples and returns
+   * an object
+   */
+  static generateObjectFromEntryList(entries) {
+    return entries.reduce(
+      (obj, { name, value }) => ({
+        [name]: value,
+        ...obj,
+      }),
+      {}
+    );
   }
 
   /**

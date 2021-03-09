@@ -1,5 +1,5 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Cache correctly initializes 1`] = `"e77f3294169d57d4447dffede642df098cc013505e90f9cea27c526b96d3a72b"`;
+exports[`Cache correctly initializes 1`] = `"e14df00d5f202b2443c2793e0142d87447db243a60516122141fa5f6a15a07b5"`;
 
 exports[`Cache.generateSignature produces a signature 1`] = `"2e3dcf4ff7fca3bdd404e8dac192f2308dda5844c96266d94fc8424057772f7c"`;

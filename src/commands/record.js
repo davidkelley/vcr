@@ -8,12 +8,16 @@ const HIT = chalk.hex(Theme.colors.success).bold('[HIT] ');
 
 const MISS = chalk.hex(Theme.colors.warning).bold('[MISS]');
 
-const handleServer = (server) => {
+/**
+ * receives an instance of server and binds to events that are generated, in order
+ * to display useful information to the caller
+ */
+const handleServer = async (server) => {
   const { config } = server;
 
   const { name = 'Unnamed' } = config;
 
-  server.start();
+  await server.start();
 
   let color = Theme.colors.secondary;
 
@@ -24,6 +28,10 @@ const handleServer = (server) => {
   const displayName = chalk.hex(color).bold(`[${name}]`);
 
   server.events.on('onStart', ({ host, port: assignedPort }) => {
+    /**
+     * display a helpful message to let the caller know the server is listening
+     * and on which port
+     */
     console.log(
       chalk`${displayName} {hex("${color}") Listening on http://${host}:${assignedPort}}`
     );
@@ -36,20 +44,28 @@ const handleServer = (server) => {
 
     const cacheStatus = isCached ? HIT : MISS;
 
+    /**
+     * display a helpful message to indicate a request has been served from the cache
+     * or is newly cached
+     */
     console.log(
       chalk`${displayName} ${cacheStatus} {hex("${statusColor}") (${status})} {${
         isCached ? 'dim' : 'visible'
       } ${request.url}}`
     );
   });
+
+  return server;
 };
 
+/**
+ * begins recording requests and responses to all of the configured origins.
+ */
 exports.record = (appConfig) => {
   const { servers: serverConfig } = appConfig;
 
+  // loop over each configured proxy and create a server!
   const servers = serverConfig.map((config) => new Server(config));
 
-  servers.forEach(handleServer);
-
-  return true;
+  return Promise.all(servers.map(handleServer));
 };

@@ -6,6 +6,25 @@ const testHAR = {
   log: {
     entries: [
       {
+        request: {
+          url: 'https://example.com/a/b/c',
+          method: 'POST',
+          headers: [
+            {
+              name: 'x-correlation-id',
+              value: '1gjaijdoawkd',
+            },
+          ],
+          queryString: [
+            {
+              name: 'test',
+              value: '123',
+            },
+          ],
+          postData: {
+            text: JSON.stringify({ foo: 'bar' }),
+          },
+        },
         response: {
           status: 200,
           headers: [
@@ -29,6 +48,25 @@ describe('HAR', () => {
   it('sets the correct class properties', () => {
     expect(new HAR(testHAR).entries).toBe(testHAR.log.entries);
     expect(new HAR().entries).toEqual([]);
+  });
+
+  describe('#generateHarRequest', () => {
+    it('returns fetch-compatible arguments', () => {
+      const har = new HAR(testHAR);
+
+      expect(har.generateHarRequest()).toEqual(
+        expect.arrayContaining([
+          expect.stringContaining('https://example.com/a/b/c?test=123'),
+          expect.objectContaining({
+            method: 'POST',
+            body: expect.stringMatching(/\"foo\"/),
+            headers: expect.objectContaining({
+              'x-correlation-id': '1gjaijdoawkd',
+            }),
+          }),
+        ])
+      );
+    });
   });
 
   describe('#toJSON', () => {
@@ -179,6 +217,28 @@ describe('HAR', () => {
 
       expect(har.entries).toHaveLength(1);
     });
+  });
+});
+
+describe('#generateObjectFromEntryList', () => {
+  it('returns the correct object', () => {
+    const entries = [
+      {
+        name: 'test',
+        value: 123456,
+      },
+      {
+        name: 'other',
+        value: 'value',
+      },
+    ];
+
+    expect(HAR.generateObjectFromEntryList(entries)).toEqual(
+      expect.objectContaining({
+        test: 123456,
+        other: 'value',
+      })
+    );
   });
 });
 

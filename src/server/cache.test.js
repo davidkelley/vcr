@@ -137,24 +137,6 @@ describe('Cache', () => {
     });
   });
 
-  describe('#all', () => {
-    beforeEach(() => {
-      mock({});
-    });
-
-    it('returns the correct files', () => {
-      const cache = setup();
-
-      cache.store({ test: 456 });
-
-      expect(cache.all()).toHaveLength(1);
-
-      expect(cache.all()).toEqual(
-        expect.arrayContaining([expect.stringMatching(/.+\.har$/)])
-      );
-    });
-  });
-
   describe('#isCached', () => {
     describe('when the request is cached', () => {
       beforeEach(() => {
@@ -189,6 +171,24 @@ describe('Cache', () => {
         expect(cache.isCached()).toBeFalsy();
       });
     });
+  });
+});
+
+describe('Cache#all', () => {
+  beforeEach(() => {
+    mock({});
+  });
+
+  it('returns the correct files', () => {
+    const cache = setup();
+
+    cache.store({ test: 456 });
+
+    expect(Cache.all('example.com')).toHaveLength(1);
+
+    expect(Cache.all('example.com')).toEqual(
+      expect.arrayContaining([expect.stringMatching(/.+\.har$/)])
+    );
   });
 });
 

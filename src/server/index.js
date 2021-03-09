@@ -95,7 +95,9 @@ class Server {
    */
   rewriteUrl(request) {
     const { url } = this;
-    return `${url.pathname}${request.url}`.replace(/\/(?:\/|(\?))/g, '$1');
+    const prefix = url.pathname.replace(/\/$/, '');
+    const suffix = request.url.replace(/^\//, '');
+    return `${prefix}/${suffix}`;
   }
 
   /**
@@ -201,7 +203,7 @@ class Server {
      * onSend event and return
      */
     if (isCached) {
-      const { har } = request;
+      const har = new HAR(cache.read());
       events.emit('onSend', request, har, isCached);
       return;
     }

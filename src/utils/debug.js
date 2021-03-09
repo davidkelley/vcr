@@ -1,10 +1,7 @@
-const { DEBUG } = process.env;
+const debug = require('debug');
 
-const debug = (message) => {
-  if (!DEBUG || !DEBUG.includes('vcr')) {
-    return;
-  }
-  console.log(message);
-};
+const instance = debug('vcr');
 
-module.exports = debug;
+instance('starting debugger');
+
+module.exports = instance;

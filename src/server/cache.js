@@ -34,7 +34,7 @@ class Cache {
         host,
         pathname,
       },
-      options
+      this.options
     );
 
     /**
@@ -60,18 +60,6 @@ class Cache {
     const { outputDirectory } = Cache;
     const { host, pathname } = this.request;
     return path.join(outputDirectory, host, pathname);
-  }
-
-  /**
-   * Return all cached files for a particular host
-   */
-  all() {
-    const { outputDirectory } = Cache;
-    const { host } = this.request;
-
-    return glob.sync(path.join(outputDirectory, host, '**/*'), {
-      nodir: true,
-    });
   }
 
   /**
@@ -181,6 +169,17 @@ class Cache {
       });
 
     return filteredObject;
+  }
+
+  /**
+   * Return all cached files for a particular host
+   */
+  static all(host) {
+    const { outputDirectory } = Cache;
+
+    return glob.sync(path.join(outputDirectory, host, '**/*'), {
+      nodir: true,
+    });
   }
 }
 

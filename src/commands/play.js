@@ -9,12 +9,16 @@ const HIT = chalk.hex(Theme.colors.success).bold('[HIT] ');
 
 const MISS = chalk.hex(Theme.colors.danger).bold('[MISS]');
 
-const handleServer = (server) => {
+/**
+ * receives an instance of Server and configures the behavior and listens for events
+ * that are happening.
+ */
+const handleServer = async (server) => {
   const { config } = server;
 
   const { name = 'Unnamed' } = config;
 
-  server.start();
+  await server.start();
 
   let color = Theme.colors.secondary;
 
@@ -25,6 +29,9 @@ const handleServer = (server) => {
   const displayName = chalk.hex(color).bold(`[${name}]`);
 
   server.events.on('onStart', ({ host, port: assignedPort }) => {
+    /**
+     * display a listening message when the server has started
+     */
     debug(
       chalk`${displayName} {hex("${color}") Listening on http://${host}:${assignedPort}}`
     );
@@ -39,20 +46,30 @@ const handleServer = (server) => {
       }}`
     );
 
+    /**
+     * if the request is not cached, then immediately reply with a 501
+     * status code (not implemented) and ensure fastify knows the reply
+     * has been sent.
+     */
     if (!isCached) {
       reply.code(501);
       reply.send('');
       reply.sent = true;
     }
   });
+
+  return server;
 };
 
+/**
+ * play all the cached responses only! This means that is a request is received
+ * that has not been cached already, a 501 status code will be returned!
+ */
 exports.play = (appConfig) => {
   const { servers: serverConfig } = appConfig;
 
+  // start a new server for each configured proxy!
   const servers = serverConfig.map((config) => new Server(config));
 
-  servers.forEach(handleServer);
-
-  return servers;
+  return Promise.all(servers.map(handleServer));
 };
