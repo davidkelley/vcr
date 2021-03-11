@@ -1,3 +1,10 @@
+## [1.2.1](https://github.com/davidkelley/vcr/compare/v1.2.0...v1.2.1) (2021-03-11)
+
+
+### Bug Fixes
+
+* 🐛 ensuring serveer is started after onStart event attached ([cdb35a3](https://github.com/davidkelley/vcr/commit/cdb35a3f0a373c97f8f4ceb3daed6fdc19e0c471))
+
 # [1.2.0](https://github.com/davidkelley/vcr/compare/v1.1.0...v1.2.0) (2021-03-09)
 
 
