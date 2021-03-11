@@ -17,8 +17,6 @@ const handleServer = async (server) => {
 
   const { name = 'Unnamed' } = config;
 
-  await server.start();
-
   let color = Theme.colors.secondary;
 
   if (name) {
@@ -54,6 +52,8 @@ const handleServer = async (server) => {
       } ${request.url}}`
     );
   });
+
+  await server.start();
 
   return server;
 };

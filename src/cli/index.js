@@ -1,4 +1,4 @@
-#!/usr/bin/env DEBUG=vcr,$DEBUG node
+#!/usr/bin/env node
 
 const path = require('path');
 const commander = require('commander');
