@@ -1,19 +1,41 @@
+const path = require('path');
+
+const Cache = require('./src/server/cache');
 const { play } = require('./src/commands/play');
 const { loadConfig } = require('./src/utils/config');
 
 const appConfig = loadConfig('vcr');
 
-let servers;
+Cache.outputDirectory = path.resolve(process.cwd(), appConfig.snapshotsDir);
 
-exports.start = () => {
-  servers = play(appConfig);
+let vcr;
+
+exports.start = async () => {
+  if (vcr) {
+    return vcr;
+  }
+
+  vcr = play(appConfig);
+  
+  return vcr;
 };
 
-exports.servers = () => servers;
+exports.servers = async () => {
+  return await vcr;
+};
 
-exports.stop = () => {
-  servers.forEach((server) => {
-    server.stop();
-  });
-  servers = null;
+exports.stop = async () => {
+  if (!vcr) {
+    return true;
+  }
+  
+  const servers = await vcr;
+
+  await Promise.all(servers.map((server) => {
+    return server.stop();
+  }));
+
+  vcr = null;
+
+  return true;
 };
