@@ -1,3 +1,10 @@
+# [1.3.0](https://github.com/davidkelley/vcr/compare/v1.2.1...v1.3.0) (2021-03-29)
+
+
+### Features
+
+* 🎸 implemented integration with testcafe ([c07f609](https://github.com/davidkelley/vcr/commit/c07f609c5e2f4c16b664177538788206a32452b4))
+
 ## [1.2.1](https://github.com/davidkelley/vcr/compare/v1.2.0...v1.2.1) (2021-03-11)
 
 
